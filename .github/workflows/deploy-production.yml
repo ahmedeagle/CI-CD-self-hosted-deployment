@@ -24,16 +24,16 @@ jobs:
         fi
 
     - name: Running Deployment
-      working-directory: /home/ubuntu/
+      working-directory: /home/ubuntu/CI-CD-self-hosted-deployment/
       run: |
         echo "Deploying branch ${{ github.ref_name }} on production"
-        echo "Working directory => /home/ubuntu/"
+        echo "Working directory => /home/ubuntu/CI-CD-self-hosted-deployment/"
 
         echo "Setting up GitHub SSH private key ..."
         eval $(ssh-agent -s)
         ssh-add /home/ubuntu/.ssh/id_rsa
 
-        git config --global --add safe.directory /home/ubuntu/
+        git config --global --add safe.directory /home/ubuntu/CI-CD-self-hosted-deployment/
         echo "Pulling latest code from branch ${{ github.ref_name }} ..."
         git pull origin ${{ github.ref_name }}
 
