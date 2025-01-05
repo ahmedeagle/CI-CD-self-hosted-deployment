@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy-service:
-    runs-on: [self-hosted, prod-machine]
+    runs-on: [self-hosted, ip-172-31-8-229]
 
     steps:
     - name: Verify OTP
