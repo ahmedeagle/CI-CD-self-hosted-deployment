@@ -1,0 +1,40 @@
+name: Production Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      otp:
+        description: 'Enter OTP'
+        required: true
+
+jobs:
+  deploy-service:
+    runs-on: [self-hosted, prod-machine]
+
+    steps:
+    - name: Verify OTP
+      run: |
+        expected_otp="${{ secrets.PROD_OTP }}"
+        entered_otp="${{ inputs.otp }}"
+        if [ "$entered_otp" == "$expected_otp" ]; then
+          echo "OTP verification successful. Continuing with the workflow."
+        else
+          echo "Invalid OTP. Workflow halted."
+          exit 1
+        fi
+
+    - name: Running Deployment
+      working-directory: /home/vagrant/
+      run: |
+        echo "Deploying branch ${{ github.ref_name }} on production"
+        echo "Working directory => /home/vagrant/"
+
+        echo "Setting up GitHub SSH private key ..."
+        eval $(ssh-agent -s)
+        ssh-add /home/vagrant/.ssh/id_rsa
+
+        git config --global --add safe.directory /home/vagrant/
+        echo "Pulling latest code from branch ${{ github.ref_name }} ..."
+        git pull origin ${{ github.ref_name }}
+
+        echo "Deployment completed successfully!"
