@@ -24,16 +24,16 @@ jobs:
         fi
 
     - name: Running Deployment
-      working-directory: /home/vagrant/
+      working-directory: /home/ubuntu/
       run: |
         echo "Deploying branch ${{ github.ref_name }} on production"
-        echo "Working directory => /home/vagrant/"
+        echo "Working directory => /home/ubuntu/"
 
         echo "Setting up GitHub SSH private key ..."
         eval $(ssh-agent -s)
-        ssh-add /home/vagrant/.ssh/id_rsa
+        ssh-add /home/ubuntu/.ssh/id_rsa
 
-        git config --global --add safe.directory /home/vagrant/
+        git config --global --add safe.directory /home/ubuntu/
         echo "Pulling latest code from branch ${{ github.ref_name }} ..."
         git pull origin ${{ github.ref_name }}
 
